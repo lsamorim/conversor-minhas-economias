@@ -32,7 +32,8 @@ namespace ConversorFaturasParaMinhasEconomias
                 var caminhoArquivoModelo = (Directory.GetCurrentDirectory() + "\\Arquivos\\Modelo_XLS.xls");
                 var caminhoParaCopia = Directory.GetCurrentDirectory() + "\\Arquivos\\Destino";
                 Directory.CreateDirectory(caminhoParaCopia);
-                var caminhoArquivoCopia = $"{caminhoParaCopia}\\{data.ToString("yyyy-MM-dd")}-{nomeDoBanco}.xls";
+                var nomeArquivoCopia = Path.GetFileNameWithoutExtension(localArquivoOrigem);
+                var caminhoArquivoCopia = $"{caminhoParaCopia}\\{nomeArquivoCopia}.xls";
 
                 File.Copy(caminhoArquivoModelo, caminhoArquivoCopia, true);
 
@@ -40,6 +41,9 @@ namespace ConversorFaturasParaMinhasEconomias
 
                 var despesas = transacoes.Where(x => x.Valor < 0);
                 var creditos = transacoes.Where(x => x.Valor > 0 && x.EhPagamentoFatura == false);
+
+                var totalFatura = despesas.Sum(x => x.Valor) + creditos.Sum(x => x.Valor);
+                Console.WriteLine($"Fatura de {nomeArquivoCopia} fechou em: {totalFatura}");
             }
 
             Console.ReadKey();
@@ -51,8 +55,10 @@ namespace ConversorFaturasParaMinhasEconomias
             {
                 case "santander":
                     return new ConversorFaturaSantander();
+                case "itau":
+                    return new ConversorFaturaItau();
                 default:
-                    return new ConversorFaturaSantander();
+                    throw new InvalidDataException($"Não existe implementação de conversor para {banco}");
             }
         }
 
