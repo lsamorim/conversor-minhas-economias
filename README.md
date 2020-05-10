@@ -1,2 +1,3 @@
-# conversor-minhas-economias
-Projeto para converter faturas de cartão de crédito dos bancos para o Template de Importação do site Minhas Economias
+# "Minhas Economias" Converter
+
+Project to convert credit card bills to Import Template from the website "Minhas Economias"
